@@ -1,0 +1,110 @@
+public class Estrategias {
+			
+	/**
+	 * Retorna el numero de fruta que resulte mas cercana al personaje.
+	 * 
+	 * @param x: la posicion en X del personaje
+	 * @param y: la posicion en Y del personaje
+	 * @param x1: la posicion en X de la primera fruta
+	 * @param y1: la posicion en Y de la primera fruta
+	 * @param x2: la posicion en X de la segunda fruta
+	 * @param y2: la posicion en Y de la segunda fruta
+	 * @return 1 si la primera fruta es la más cercana, 2 en caso contrario.
+	 */
+	public int frutaMasCercana(int x, int y, int x1, int y1, int x2, int y2) {
+		
+		
+		int distanciaAFruta1=Math.abs(x-x1) + Math.abs(y-y1);
+		int distanciaAFruta2=Math.abs(x-x2) + Math.abs(y-y2);
+		
+		if(distanciaAFruta1>distanciaAFruta2){
+			return 2;
+		}
+			return 1;
+		
+		
+	}
+
+	
+	/**
+	 * Saca por pantalla las instrucciones necesarias para llegar desde
+	 * la posicion actual hasta la posicion objetivo.
+	 * 
+	 * Ejemplo:
+	 * desplazarseHacia(0, 0, 1, 1)
+	 * 
+	 * Debe sacar por pantalla:
+	 * ARRIBA
+	 * DERECHA
+	 *
+	 * Ejemplo 2:
+	 * desplazarseHacia(0, 0, -1, -1)
+	 * 
+	 * Debe sacar por pantalla:
+	 * ABAJO
+	 * IZQUIERDA
+	 * 
+	 * @param x: la posicion en X del personaje
+	 * @param y: la posicion en Y del personaje
+	 * @param xObj: la posicion en X del objetivo
+	 * @param yObj: la posicion en Y del objetivo
+	 */
+	public void desplazarseHacia(int x, int y, int xObj, int yObj) {
+		
+		
+		
+		for(int i = y ; i<yObj; i++){
+			System.out.println("Arriba");
+		}
+		for(int i=y;i>yObj;i--){
+			System.out.println("Abajo");
+		}
+		for(int i =x;i>xObj;i--){
+			System.out.println("Izquierda");
+		}
+		for(int i =x;i<xObj;i++){
+			System.out.println("Derecha");
+		}
+	}
+
+	/**
+	 * Saca por pantalla las instrucciones necesarias para alejarse desde
+	 * la posicion actual de la posicion del enemigo, a la posición opuesta.
+	 * 
+	 * Ejemplo:
+	 * alejarseDe(0, 0, 1, 2) -> debe ir a la posición -1, -2
+	 * 
+	 * Debe sacar por pantalla:
+	 * ABAJO
+	 * ABAJO
+	 * IZQUIERDA
+	 * 
+	 * @param x: la posicion en X del personaje
+	 * @param y: la posicion en Y del personaje
+	 * @param xEnem: la posicion en X del enemigo
+	 * @param yEnem: la posicion en Y del enemigo
+	 * 
+	 * 
+	 */
+	public void alejarseDe(int x, int y, int xEnem, int yEnem) {
+//EL UNICO PROBLEMA QUE ENCONTRE ES SI EL ENEMIGO ESTA EN LA POSICION (0,0) no tiene opuesto y no funciona.		
+		desplazarseHacia(x,y,-xEnem,-yEnem);
+			
+		}
+
+//		int distanciaEnemigo = Math.abs(x-xEnem)+Math.abs(y-yEnem);
+//		int distanciaOpuestaAlEnemigo= -1*distanciaEnemigo;
+//		
+//		for(int i =distanciaOpuestaAlEnemigo;i>x;i--){
+//			System.out.println("DERECHA");
+//			
+//		}
+//		for(int i =distanciaOpuestaAlEnemigo;i<x;i++){
+//			System.out.println("IZQUIERDA");
+//			
+//		}
+//
+//		
+//		
+//	}
+}
