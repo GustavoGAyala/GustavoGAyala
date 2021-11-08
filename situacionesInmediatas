@@ -1,0 +1,13 @@
+if (adelante == Cosas.FRUTA || izquierda == Cosas.FRUTA || derecha == Cosas.FRUTA) {
+			System.out.println("Comer fruta");
+		} 
+		else if (adelante == Cosas.NADA && izquierda == Cosas.NADA && derecha == Cosas.NADA && (atras == Cosas.FRUTA || atras == Cosas.NADA)) {
+			System.out.println("Avanzar");
+		}
+		else if (adelante == Cosas.ENEMIGO && izquierda == Cosas.NADA && derecha == Cosas.NADA) {
+			System.out.println("Girar a la izquierda");}
+		else if ((adelante == Cosas.ENEMIGO || adelante == Cosas.PARED) && (izquierda == Cosas.ENEMIGO || izquierda == Cosas.PARED) && derecha == Cosas.NADA) {
+			System.out.println("Girar a la derecha");}
+		else {
+			System.out.println("Morir");}
+	}
