@@ -1,0 +1,299 @@
+public class Snake {
+	
+	// se considera un Snake que ocupa un solo casillero del mapa..
+	private int x, y;
+	private boolean estaViva = true;
+	private Mapa mapa= new Mapa(10,10);
+	private int altoTotal=mapa.consultarAlturaMapa();
+	private int largoTotal=mapa.consultarAnchoMapa();
+	
+	
+	/**
+	 * Recibe mapa y posición inicial. El mapa contiene posiciones
+	 * previamente ocupadas
+	 */
+	public Snake(Mapa mapa, int x, int y) {
+		this.mapa = mapa;
+		this.x = x;
+		this.y = y;
+		
+		mapa.ocupar(x, y);
+	}
+
+	/**
+	 * @pre  debe estar viva
+	 * @post si el movimiento es posible, debe desplazarse
+	 * @post debe morir si tal desplazamiento no es compatible
+	 *       o si la posición está ocupada
+	 * @post debe actualizar el mapa en todos los casos
+	 * @param direccion, la dirección hacia la que debe moverse
+	 */
+	public boolean movimientoPosible(Direccion direccion){	
+		boolean esPosible = false;
+		Direccion direccionAnterior = null;
+		
+		if(direccion==Direccion.ARRIBA){
+			if(this.y>0 && this.y<altoTotal && direccionAnterior !=Direccion.ARRIBA){
+				esPosible= true;
+				direccionAnterior=Direccion.ARRIBA;
+			}				
+		}
+		if(direccion==Direccion.ABAJO){			
+			if(this.y>=0 && this.y<altoTotal && direccionAnterior!=Direccion.ABAJO){
+				esPosible=true;
+				direccionAnterior=Direccion.ABAJO;
+			}
+		}		
+		if(direccion==Direccion.IZQUIERDA){			
+			if(this.x>0 && this.x<largoTotal && direccionAnterior!=Direccion.DERECHA){
+				esPosible=true;
+				direccionAnterior=Direccion.IZQUIERDA;
+			}
+		}
+		if(direccion==Direccion.DERECHA){			
+			if(this.y>=0 && this.y<altoTotal && direccionAnterior!=Direccion.IZQUIERDA){
+				esPosible=true;
+				direccionAnterior=Direccion.DERECHA;
+			}
+		}
+		return esPosible;
+		}
+	
+
+
+	public void mover(Direccion direccion){
+		
+		if(direccion==Direccion.ARRIBA){
+			mapa.desocupar(this.x, this.y);
+			for(int arribaCuanto = this.y ; arribaCuanto>1;arribaCuanto--){
+				
+				mapa.ocupar(x, arribaCuanto);
+				
+			}
+			
+		}
+		if(direccion==Direccion.ABAJO){
+			mapa.desocupar(this.x, this.y);
+			for(int abajoCuanto = this.y ; abajoCuanto<altoTotal;abajoCuanto++){
+				
+				mapa.ocupar(x, abajoCuanto);
+				
+			}
+			
+		}
+		if(direccion==Direccion.DERECHA){
+			mapa.desocupar(this.x, this.y);
+			for(int derechaCuanto = x ; derechaCuanto<largoTotal;derechaCuanto++){
+			
+				mapa.ocupar(derechaCuanto, this.y);
+				
+			}
+			
+		}
+		if(direccion==Direccion.IZQUIERDA){
+			mapa.desocupar(this.x, this.y);
+			for(int izquierdaCuanto = x ; izquierdaCuanto>1;izquierdaCuanto--){
+				
+				mapa.ocupar(izquierdaCuanto, this.y);
+				
+			}
+			
+		}
+		
+	}
+	
+	public void desplazarseHacia(Direccion direccion) {
+		if(estaViva){
+			
+			
+			if(movimientoPosible(direccion)==true){
+				
+				
+				mover(direccion);
+				
+			}else {
+				this.estaViva = false;
+				mapa.desocupar(this.x, this.y);
+				System.out.println("GAME OVER");
+			
+			
+		}
+		
+			
+		}
+		// completar
+	}
+	
+	public int getX() {
+		return this.x;
+	}
+	
+	public int getY() {
+		return this.y;
+	}
+	
+	public boolean isViva() {
+		return this.estaViva;
+	}
+}
+
+enum Direccion {
+	ARRIBA, ABAJO, IZQUIERDA, DERECHA
+}
+
+class Mapa {
+	private boolean[][] ocupados;
+	int alturaMapa;
+	int anchoMapa;
+	
+	public Mapa(int ancho, int alto) {		
+		 ocupados = new boolean [ancho-1][alto-1];
+		 alturaMapa=alto;
+		 anchoMapa=ancho;
+		 
+		 for(int x=0;x<ocupados.length;x++) {
+			 for(int y=0;y<ocupados[x].length;y++) {
+				 ocupados[x][y]=false;
+			 }
+		 }
+		 
+	}
+	
+		public int consultarAlturaMapa(){
+			return alturaMapa;
+	}
+		public int consultarAnchoMapa(){
+			return anchoMapa;
+	}
+		public boolean estaOcupado(int x, int y) {		
+			return ocupados[x-1][y-1];						
+	}	
+		public void ocupar(int x, int y) {
+			if(ocupados[x-1][y-1]==true){
+				throw new Error("casillero ocupado");
+			}			
+			ocupados[x-1][y-1]=true;			
+	}	
+		public void desocupar(int x, int y) {
+			if(ocupados[x-1][y-1]==false){
+				throw new Error("El casillero ya se encuentra desocupado");
+			}
+			ocupados [x-1][y-1]=false;		
+	}
+		
+		
+}
+
+
+
+/// PRUEBAS
+
+import static org.junit.Assert.*;
+
+import org.junit.Assert;
+import org.junit.Test;
+
+public class SnakeTest {
+
+	@Test
+	public void moverSnakeParaArriba() {
+		
+		//Condicion inicial..
+		
+		Mapa mapa = new Mapa(10,10);
+		Snake snakeTavo=new Snake(mapa ,4,4);
+		//Operacion
+		
+		snakeTavo.desplazarseHacia(Direccion.ARRIBA);
+		//Comprobacion
+		Assert.assertEquals(true, mapa.estaOcupado(4, 3));
+		
+}
+	@Test
+	public void moverSnakeParaAbajo() {
+		
+		//Condicion inicial..
+		
+		Mapa mapa = new Mapa(10,10);
+		Snake snakeTavo=new Snake(mapa ,4,4);
+		//Operacion
+		
+		snakeTavo.desplazarseHacia(Direccion.ABAJO);
+		//Comprobacion
+		Assert.assertEquals(true, mapa.estaOcupado(4, 5));
+		
+}
+	@Test
+	public void moverSnakeParaDerecha() {
+		
+		//Condicion inicial..
+		
+		Mapa mapa = new Mapa(10,10);
+		Snake snakeTavo=new Snake(mapa ,4,4);
+		//Operacion
+		
+		snakeTavo.desplazarseHacia(Direccion.DERECHA);
+		//Comprobacion
+		Assert.assertEquals(true, mapa.estaOcupado(5, 4));
+		
+}
+	@Test
+	public void moverSnakeParaIzquierda() {
+		
+		//Condicion inicial..
+		
+		Mapa mapa = new Mapa(10,10);
+		Snake snakeTavo=new Snake(mapa ,4,4);
+		//Operacion
+		
+		snakeTavo.desplazarseHacia(Direccion.IZQUIERDA);
+		//Comprobacion
+		Assert.assertEquals(true, mapa.estaOcupado(3, 4));
+		
+}
+	@Test(expected=Error.class)
+	public void moverSnakeParaArribaYParaAbajoYFalle() {
+		
+		//Condicion inicial..
+		
+		Mapa mapa = new Mapa(10,10);
+		Snake snakeTavo=new Snake(mapa ,4,4);
+		//Operacion
+		
+		snakeTavo.desplazarseHacia(Direccion.ARRIBA);
+		snakeTavo.desplazarseHacia(Direccion.ABAJO);
+		//Comprobacion
+		Assert.assertEquals(false, mapa.estaOcupado(4, 4));
+		
+}
+	@Test(expected=Error.class)
+	public void moverSnakeParaDerechaEIzquierdaYFalle() {
+		
+		//Condicion inicial..
+		
+		Mapa mapa = new Mapa(10,10);
+		Snake snakeTavo=new Snake(mapa ,4,4);
+		//Operacion
+		
+		snakeTavo.desplazarseHacia(Direccion.DERECHA);
+		snakeTavo.desplazarseHacia(Direccion.IZQUIERDA);
+		//Comprobacion
+		Assert.assertEquals(false, mapa.estaOcupado(4, 4));
+		
+}
+	@Test(expected=Error.class)
+	public void moverSnakeParaAbajoBuscandoError() {
+		
+		//Condicion inicial..
+		
+		Mapa mapa = new Mapa(10,10);
+		Snake snakeTavo=new Snake(mapa ,5,5);
+		Snake snakeTiesto=new Snake(mapa ,5,4);
+		//Operacion
+		
+		snakeTavo.desplazarseHacia(Direccion.ABAJO);
+		//Comprobacion
+		Assert.assertEquals(false, mapa.estaOcupado(5, 4));
+		
+}
+}
